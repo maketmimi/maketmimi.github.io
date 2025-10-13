@@ -258,7 +258,7 @@
       <p class="subtitle">ربحت دينار!</p>
 
       <div class="screen" aria-live="polite" aria-atomic="true">
-        <div class="balance-big" id="balanceText">0 د.</div>
+        <div class="balance-big" id="balanceText">0 دينار</div>
         <div class="balance-small">الرصيد</div>
         <div class="slot" aria-hidden="true">فتحة توزيع</div>
       </div>
@@ -286,7 +286,7 @@
         </div>
 
         <div class="tray" id="tray" aria-live="polite">
-          <div class="cash" id="trayText">0 د.</div>
+          <div class="cash" id="trayText">0 دينار</div>
         </div>
       </div>
     </div>
@@ -371,8 +371,8 @@
   // تحديث الواجهة (مرن للوحدة وعرض)
   function updateUI(){
     // اعرض العملة العربية بدل $
-    balanceText.textContent = `${balance} د.`;
-    trayText.textContent = `${balance} د.`;
+    balanceText.textContent = `${balance} دينار`;
+    trayText.textContent = `${balance} دينار`;
     meterFill.style.width = Math.min(100, (balance/limit)*100) + '%';
     leftCount.textContent = Math.max(0, limit - balance);
     // تعيين aria-hidden/popup
