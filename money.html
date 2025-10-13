@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <link rel="icon" href="file:Dinar.jpg" type="image/jpeg">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>مكينة الجنيات💸</title>
+<style>
+  :root{
+    --bg1:#0f2027;
+    --bg2:#203a43;
+    --accent1:#ffd166;
+    --accent2:#06d6a0;
+    --panel:#0b1320;
+    --glass: rgba(255,255,255,0.08);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;font-family:"Cairo", sans-serif;direction:rtl;}
+  body{
+    display:flex;align-items:center;justify-content:center;flex-direction:column;
+    background: radial-gradient(1200px 600px at 10% 20%, rgba(6,214,160,0.08), transparent),
+                linear-gradient(135deg,var(--bg1),var(--bg2));
+    color:#e6eef3;
+    padding:16px;
+    overflow:hidden;
+  }
+
+  .machine {
+    width: 100%; max-width:720px; background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.15));
+    border-radius:18px; padding:16px; box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+    display:flex; flex-direction:column; gap:18px; align-items:center;
+    border:1px solid rgba(255,255,255,0.04);
+  }
+
+  @media (min-width: 720px){
+    .machine {flex-direction:row; justify-content:space-between; align-items:center;}
+  }
+
+  .left, .right {
+    flex:1; width:100%;
+  }
+
+  .left {
+    padding:12px; background:linear-gradient(180deg,var(--panel), #07101a); border-radius:12px; position:relative; overflow:hidden;
+  }
+
+  .title{font-size:20px;margin:0 0 6px 0;text-align:center;}
+  .subtitle{font-size:13px; color:#b6cad6;margin:0 0 18px 0;text-align:center;}
+
+  .screen{
+    height:180px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.25));
+    display:flex; align-items:center; justify-content:center; flex-direction:column; position:relative; border:1px solid var(--glass);
+  }
+
+  .balance-big{font-weight:700; font-size:36px; letter-spacing:1px;}
+  .balance-small{font-size:14px; color:#b6cad6;}
+
+  .slot {
+    margin-top:10px; width:70%; height:24px; border-radius:8px; background:rgba(0,0,0,0.45); display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.03);
+    color:#dff7e6;font-weight:600;font-size:13px;
+  }
+
+  .controls{display:flex; flex-direction:column; align-items:center; gap:10px; margin-top:14px;}
+
+  .big-btn{
+    background:linear-gradient(180deg,var(--accent1), #ffb703); color:#082b26; border:none; padding:14px 24px; border-radius:10px; font-weight:700; font-size:16px; cursor:pointer; box-shadow:0 6px 12px rgba(255,209,102,0.15), inset 0 -4px 8px rgba(0,0,0,0.12);
+    width:80%; max-width:260px;
+  }
+  .big-btn:active{transform:translateY(1px)}
+  .big-btn.locked{filter:grayscale(0.5) opacity(0.6);}
+
+  .info{font-size:13px;color:#b6cad6;text-align:center;}
+
+  .right{display:flex;flex-direction:column;align-items:center;gap:12px;}
+  .machine-face{width:100%;height:auto;min-height:260px;background:linear-gradient(180deg,#071428,#09203f);border-radius:12px;padding:12px;position:relative;border:1px solid rgba(255,255,255,0.03)}
+
+  .screen-window{width:100%;height:140px;border-radius:8px;background:linear-gradient(180deg,#072029,#083042);display:flex;align-items:center;justify-content:center;flex-direction:column;border:1px solid rgba(255,255,255,0.02)}
+  .meter{margin-top:10px;height:10px;width:92%;background:rgba(255,255,255,0.04);border-radius:8px;overflow:hidden}
+  .meter > span{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--accent2), #06a86b);border-radius:8px;transition:width 420ms cubic-bezier(.2,.9,.2,1)}
+
+  .coin-slot{margin-top:12px;width:100%;height:50px;background:linear-gradient(180deg,#0c1b25,#062025); border-radius:8px; display:flex;align-items:center;justify-content:center; flex-direction:column; border:1px solid rgba(255,255,255,0.03)}
+  .coin-slot .slot-mouth{width:86%;height:10px;background:#071018;border-radius:6px}
+  .coin-slot .label{font-size:11px;color:#9fb7c6;margin-top:4px}
+
+  .tray{margin-top:10px;width:100%;height:72px;background:linear-gradient(180deg,#021318,#063038); border-radius:10px; display:flex;align-items:center;justify-content:center; border:1px solid rgba(255,255,255,0.03)}
+  .tray .cash{font-size:22px; font-weight:800}
+
+  .bill-popup {
+    position:fixed; top:50%; right:50%; transform:translate(50%, -50%);
+    background:white; border-radius:10px; padding:12px; box-shadow:0 8px 30px rgba(0,0,0,0.4);
+    display:none; z-index:10000; text-align:center;
+  }
+  .bill-popup img {
+    width:150px; border-radius:8px;
+    max-width:80vw;
+  }
+
+  .confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    top: 0;
+    animation: fall 2s linear forwards;
+    z-index:9999;
+    border-radius:2px;
+  }
+  @keyframes fall {
+    0% { transform: translateY(-10vh) rotate(0); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+  <div class="machine">
+    <div class="left">
+      <h2 class="title">مكينة الجنيات</h2>
+      <p class="subtitle">ربحت دينار!</p>
+
+      <div class="screen">
+        <div class="balance-big" id="balanceText">$0</div>
+        <div class="balance-small">الرصيد</div>
+        <div class="slot">فتحة توزيع</div>
+      </div>
+
+      <div class="controls">
+        <button id="pressBtn" class="big-btn" aria-pressed="false">خوذ جني</button>
+        <div class="info">
+          <div>المتبقي حتى الحد: <strong id="leftCount">10</strong></div>
+          <div class="msg" id="userMsg"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="machine-face">
+        <div class="screen-window">
+          <div style="font-weight:700; font-size:18px">مكينة الدنانير</div>
+          <div style="font-size:12px; color:#b6cad6; margin-top:6px">تعطي جني في كل ضغطة</div>
+          <div class="meter" style="margin-top:12px"><span id="meterFill"></span></div>
+        </div>
+
+        <div class="coin-slot">
+          <div class="slot-mouth"></div>
+          <div class="label">تستخدم عندما تريد أن تعطي جني لعيل!</div>
+        </div>
+
+        <div class="tray" id="tray">
+          <div class="cash" id="trayText">$0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SVG دولار مضمّن كصورة بيانات لضمان الظهور -->
+  <div class="bill-popup" id="billPopup">
+    <img id="billImg" src="file:Dinar.jpg" alt="دينار" />
+  </div>
+
+<script>
+  // استخدام WebAudio لتجاوز قيود تشغيل الصوت على بعض المتصفحات
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  let audioCtx = null;
+
+  function ensureAudio(){
+    if(!audioCtx){
+      audioCtx = new AudioCtx();
+    }
+  }
+
+  function playClickSound(){
+    try{
+      ensureAudio();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = 'square';
+      o.frequency.value = 900;
+      g.gain.value = 0.02;
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start();
+      setTimeout(()=>{o.stop();}, 80);
+    }catch(e){console.warn('صوت النقر ليس متاحًا:', e)}
+  }
+
+  function playCashSound(){
+    try{
+      ensureAudio();
+      // سلسلة نغمات قصيرة لمحاكاة صوت نقدي
+      const now = audioCtx.currentTime;
+      const g = audioCtx.createGain();
+      g.gain.value = 0.06;
+      g.connect(audioCtx.destination);
+
+      const freqs = [880, 660, 1240];
+      freqs.forEach((f,i)=>{
+        const o = audioCtx.createOscillator();
+        o.type = 'sine';
+        o.frequency.value = f;
+        o.connect(g);
+        o.start(now + i*0.03);
+        o.stop(now + i*0.03 + 0.12);
+      });
+    }catch(e){console.warn('صوت الكاش غير متاح:', e)}
+  }
+
+  // عناصر DOM
+  let balance = 0;
+  const limit = 10;
+  let extraGiven = false;
+  let insistCount = 0;
+  const insistNeeded = 5; // بعد 5 نقرات عند القفل تحصل على دولار إضافي
+
+  const pressBtn = document.getElementById('pressBtn');
+  const balanceText = document.getElementById('balanceText');
+  const leftCount = document.getElementById('leftCount');
+  const meterFill = document.getElementById('meterFill');
+  const userMsg = document.getElementById('userMsg');
+  const trayText = document.getElementById('trayText');
+  const popup = document.getElementById('billPopup');
+
+  function updateUI(){
+    balanceText.textContent = `$${balance}`;
+    trayText.textContent = `$${balance}`;
+    meterFill.style.width = Math.min(100, (balance/limit)*100) + '%';
+    leftCount.textContent = Math.max(0, limit - balance);
+  }
+
+  function showPopup(){
+    // إظهار صورة الدولار واحتفالات
+    popup.style.display = 'block';
+    popup.animate([{transform:'translateY(-10px) scale(0.96)', opacity:0},{transform:'translateY(0) scale(1)', opacity:1}], {duration:200, easing:'ease-out'});
+    createConfettiFromTop();
+    // اهتزاز إن وُجد
+    if(navigator.vibrate) navigator.vibrate(120);
+    setTimeout(()=>{popup.style.display = 'none';},2000);
+  }
+
+  function createConfettiFromTop(){
+    for(let i=0;i<16;i++){
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = (20 + Math.random()*60) + '%'; // من منتصف الماكينة تقريبًا
+      c.style.backgroundColor = ['#ffd166','#06d6a0','#ef476f','#118ab2'][Math.floor(Math.random()*4)];
+      c.style.top = '-6vh';
+      c.style.width = (6+Math.random()*10)+'px';
+      c.style.height = (10+Math.random()*16)+'px';
+      c.style.animationDuration = (1.6 + Math.random()*0.9) + 's';
+      document.body.appendChild(c);
+      setTimeout(()=>{c.remove();},2200);
+    }
+  }
+
+  // حالة القفل: بدلًا من تعطيل الزر فعليًا نضع حالة "locked" ونغير المظهر
+  let locked = false;
+
+  function lockMachine(){
+    locked = true;
+    pressBtn.classList.add('locked');
+    pressBtn.setAttribute('aria-pressed', 'true');
+  }
+  function unlockMachine(){
+    locked = false;
+    pressBtn.classList.remove('locked');
+    pressBtn.setAttribute('aria-pressed', 'false');
+  }
+
+  // المعالجة الرئيسية للنقرات (يتعامل مع اللمس والماوس)
+  function handlePress(){
+    // تأكد من تهيئة AudioContext عند أول تفاعل (مطلوب على بعض الهواتف)
+    ensureAudio();
+
+    if(!locked){
+      // سلوك عادي قبل الوصول للحد
+      if(balance < limit){
+        playClickSound();
+        balance++;
+        updateUI();
+        showPopup();
+        playCashSound();
+        if(balance >= limit){
+          // عندما نصل للحد، نغلق الماكينة بصريًا لكن لا نعطل الزر
+          lockMachine();
+          userMsg.textContent = 'مية مية سادك روح!';
+        }
+      }
+      return;
+    }
+
+    // إذا كانت الماكينة قفلت (locked) ولم تُمنح البونص بعد
+    if(locked && !extraGiven){
+      insistCount++;
+      userMsg.textContent = `معش في جنيات`;
+      // هرسة صوتية خفيفة لإظهار التفاعل
+      playClickSound();
+      if(insistCount >= insistNeeded){
+        // فك القفل مؤقتًا لإعطاء دولار واحد
+        extraGiven = true;
+        unlockMachine();
+        userMsg.textContent = 'اخر جني!';
+        // نعطي المستخدم دولارًا إضافيًا فورًا عند فك القفل
+        setTimeout(()=>{
+          playClickSound(); playCashSound(); showPopup();
+          balance++;
+          updateUI();
+          // بعد إعطاء البونص نغلق الماكينة نهائيًا
+          lockMachine();
+          userMsg.textContent = 'شن مزال تبي!';
+        }, 220);
+      }
+      return;
+    }
+
+    // حالات أخرى (مثلاً بعد منح البونص) لا تفعل شيئًا
+  }
+
+  // نربط كل من اللمس والماوس وكيبورد
+  pressBtn.addEventListener('click', (e)=>{ e.preventDefault(); handlePress(); });
+  pressBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); handlePress(); }, {passive:false});
+  document.addEventListener('keydown', (e)=>{ if(e.code==='Space' || e.code==='Enter'){ e.preventDefault(); handlePress(); }});
+
+  // تهيئة الواجهة أولًا
+  updateUI();
+</script>
+</body>
+</html>
