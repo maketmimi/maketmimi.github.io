@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>مكينة الجنيات💸</title>
+
+<!-- استخدمت ملف صورة مباشر من raw.githubusercontent لعرض موثوق على الويب -->
+<link rel="icon" href="https://raw.githubusercontent.com/maketmimi/maketmimi.github.io/b6a63e09a06bd020001d6575a9c512c898ee0362/Dinar.jpg" type="image/jpeg">
+
+<style>
+  :root{
+    /* الألوان */
+    --bg1:#0f2027;
+    --bg2:#203a43;
+    --accent1:#ffd166;
+    --accent2:#06d6a0;
+    --panel:#0b1320;
+    --glass: rgba(255,255,255,0.08);
+
+    /* مقاسات مرنة */
+    --max-width: 1100px;
+    --gutter: 1rem;
+
+    /* مقاسات قابلة للتدرج */
+    --title-size: clamp(1.1rem, 2.2vw + 0.2rem, 1.5rem);
+    --big-balance-size: clamp(1.5rem, 4.5vw, 3.2rem);
+    --small-text-size: clamp(0.8rem, 1.6vw, 1rem);
+    --btn-padding: clamp(10px, 1.2vw, 14px);
+    --btn-font: clamp(1rem, 2.2vw, 1.1rem);
+
+    /* touch target */
+    --touch-min: 44px;
+  }
+
+  /* Reset & base */
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;font-family:"Cairo", "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;direction:rtl;}
+  body{
+    display:flex; align-items:center; justify-content:center; padding:var(--gutter);
+    background: radial-gradient(1200px 600px at 10% 20%, rgba(6,214,160,0.06), transparent),
+                linear-gradient(135deg,var(--bg1),var(--bg2));
+    color:#e6eef3;
+    overflow-y:auto;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    min-height:100vh;
+  }
+
+  /* Container */
+  .machine {
+    width: 100%;
+    max-width: var(--max-width);
+    background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.12));
+    border-radius:14px;
+    padding: clamp(12px, 2vw, 20px);
+    box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+    display:flex;
+    flex-direction:column;
+    gap:clamp(10px, 2vw, 18px);
+    align-items:stretch;
+    border:1px solid rgba(255,255,255,0.04);
+  }
+
+  /* layout adjustments for larger screens */
+  @media (min-width: 720px){
+    .machine { flex-direction:row; align-items:flex-start; }
+  }
+
+  .left, .right {
+    flex:1 1 0;
+    min-width:0;
+    width:100%;
+  }
+
+  .left {
+    padding: clamp(10px, 1.8vw, 16px);
+    background: linear-gradient(180deg,var(--panel), #07101a);
+    border-radius:10px;
+    position:relative;
+    overflow:visible;
+  }
+
+  .title{ font-size:var(--title-size); margin:0 0 6px 0; text-align:center; font-weight:700; }
+  .subtitle{ font-size:var(--small-text-size); color:#b6cad6; margin:0 0 12px 0; text-align:center; }
+
+  /* Screen (balance) */
+  .screen{
+    border-radius:12px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.22));
+    display:flex; align-items:center; justify-content:center; flex-direction:column;
+    position:relative;
+    border:1px solid var(--glass);
+    padding: clamp(10px, 2vw, 16px);
+    gap:6px;
+    min-height: clamp(120px, 20vh, 220px);
+  }
+
+  .balance-big{ font-weight:800; font-size:var(--big-balance-size); letter-spacing:0.6px; line-height:1; }
+  .balance-small{ font-size:var(--small-text-size); color:#b6cad6; }
+
+  .slot {
+    margin-top:6px;
+    width: clamp(50%, 70%, 70%);
+    height: clamp(28px, 4.5vh, 36px);
+    border-radius:8px;
+    background:rgba(0,0,0,0.45);
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid rgba(255,255,255,0.03);
+    color:#dff7e6; font-weight:600; font-size:0.95rem;
+  }
+
+  .controls{ display:flex; flex-direction:column; align-items:center; gap:12px; margin-top:8px; }
+
+  .big-btn{
+    background:linear-gradient(180deg,var(--accent1), #ffb703);
+    color:#082b26;
+    border:none;
+    padding: var(--btn-padding) 1.6rem;
+    border-radius:12px;
+    font-weight:800;
+    font-size:var(--btn-font);
+    cursor:pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+    width: clamp(70%, 60%, 260px);
+    min-height: var(--touch-min);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    transition: transform .12s ease, opacity .12s ease, filter .12s ease;
+    touch-action: manipulation;
+  }
+  .big-btn:active{ transform:translateY(1px); }
+  .big-btn.locked{ filter:grayscale(0.5) opacity(0.7); }
+
+  .info{ font-size:var(--small-text-size); color:#b6cad6; text-align:center; line-height:1.4; }
+
+  .right{ display:flex; flex-direction:column; align-items:center; gap:12px; width:100%; }
+
+  .machine-face{
+    width:100%;
+    height:auto;
+    min-height: clamp(240px, 40vh, 360px);
+    background: linear-gradient(180deg,#071428,#09203f);
+    border-radius:12px;
+    padding: clamp(10px, 1.8vw, 14px);
+    position:relative;
+    border:1px solid rgba(255,255,255,0.03);
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    align-items:stretch;
+    justify-content:flex-start;
+  }
+
+  .screen-window{
+    width:100%;
+    border-radius:8px;
+    background:linear-gradient(180deg,#072029,#083042);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    border:1px solid rgba(255,255,255,0.03);
+    padding: clamp(8px,1.5vw,12px);
+    min-height: clamp(90px, 16vh, 140px);
+  }
+
+  .meter{ margin-top:8px; height: clamp(8px, 1.2vh, 12px); width:100%; background:rgba(255,255,255,0.04); border-radius:8px; overflow:hidden; }
+  .meter > span{ display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--accent2), #06a86b); border-radius:8px; transition:width 420ms cubic-bezier(.2,.9,.2,1); }
+
+  .coin-slot{
+    margin-top:6px;
+    width:100%;
+    min-height: clamp(42px, 6.5vh, 60px);
+    background:linear-gradient(180deg,#0c1b25,#062025);
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    padding:6px;
+  }
+  .coin-slot .slot-mouth{ width:86%; height: clamp(8px, 0.9vh, 12px); background:#071018; border-radius:6px; }
+  .coin-slot .label{ font-size:0.85rem; color:#9fb7c6; margin-top:6px; text-align:center; }
+
+  .tray{
+    margin-top:6px;
+    width:100%;
+    min-height: clamp(56px, 10vh, 84px);
+    background:linear-gradient(180deg,#021318,#063038);
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid rgba(255,255,255,0.03);
+    padding:8px;
+  }
+  .tray .cash{ font-size: clamp(1rem, 3.5vw, 1.6rem); font-weight:800; color:#dff7e6; }
+
+  /* Bill popup (responsive & centered) */
+  .bill-popup {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(180deg, #fff, #f7f7f7);
+    border-radius:12px;
+    padding: clamp(8px,1.4vw,14px);
+    box-shadow:0 8px 40px rgba(0,0,0,0.45);
+    display:none;
+    z-index:10000;
+    text-align:center;
+    max-width: min(420px, 90vw);
+    width: auto;
+    pointer-events:none;
+  }
+  .bill-popup img {
+    width:100%;
+    height:auto;
+    border-radius:8px;
+    display:block;
+  }
+
+  /* Confetti responsive */
+  .confetti {
+    position: fixed;
+    top: -10vh;
+    animation: fall 2s linear forwards;
+    z-index:9999;
+    border-radius:2px;
+    opacity:0.98;
+    pointer-events:none;
+  }
+  @keyframes fall {
+    0% { transform: translateY(-10vh) rotate(0); opacity:1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity:0; }
+  }
+
+  /* Reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    .meter > span, .bill-popup, .confetti, .big-btn { transition: none !important; animation: none !important; }
+  }
+
+  /* Smaller devices adjustments */
+  @media (max-width:420px){
+    :root{ --max-width: 420px; }
+    .big-btn{ width: 90%; }
+    .slot { width: 85%; }
+    .tray .cash { font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+  <div class="machine" role="application" aria-label="مكينة الجنيات">
+    <div class="left">
+      <h2 class="title">مكينة الجنيات</h2>
+      <p class="subtitle">ربحت دينار!</p>
+
+      <div class="screen" aria-live="polite" aria-atomic="true">
+        <div class="balance-big" id="balanceText">0 د.</div>
+        <div class="balance-small">الرصيد</div>
+        <div class="slot" aria-hidden="true">فتحة توزيع</div>
+      </div>
+
+      <div class="controls" role="region" aria-label="التحكم">
+        <button id="pressBtn" class="big-btn" aria-pressed="false" aria-label="اخذ جني">خوذ جني</button>
+        <div class="info" aria-hidden="false">
+          <div>المتبقي حتى الحد: <strong id="leftCount">10</strong></div>
+          <div class="msg" id="userMsg" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="machine-face" role="region" aria-label="وجه الماكينة">
+        <div class="screen-window" aria-hidden="true">
+          <div style="font-weight:700; font-size:1.05rem">مكينة الدنانير</div>
+          <div style="font-size:0.9rem; color:#b6cad6; margin-top:6px">تعطي جني في كل ضغطة</div>
+          <div class="meter" style="margin-top:12px"><span id="meterFill" aria-hidden="true"></span></div>
+        </div>
+
+        <div class="coin-slot" aria-hidden="true">
+          <div class="slot-mouth"></div>
+          <div class="label">تستخدم عندما تريد أن تعطي جني لعيل!</div>
+        </div>
+
+        <div class="tray" id="tray" aria-live="polite">
+          <div class="cash" id="trayText">0 د.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bill image popup (responsive) -->
+  <div class="bill-popup" id="billPopup" role="dialog" aria-modal="false" aria-hidden="true">
+    <img id="billImg" src="https://raw.githubusercontent.com/maketmimi/maketmimi.github.io/b6a63e09a06bd020001d6575a9c512c898ee0362/Dinar.jpg" alt="دينار" />
+  </div>
+
+<script>
+  // تحسين تجربة الصوت: نُنشئ AudioContext عند التفاعل الأول ونستكمل في كل نقرات
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  let audioCtx = null;
+
+  function ensureAudio(){
+    if(!audioCtx){
+      try{
+        audioCtx = new AudioCtx();
+      }catch(e){
+        // لا شيء، المتصفح لا يدعم WebAudio
+        audioCtx = null;
+      }
+    }
+    // بعض المتصفحات تحتاج resume بعد أول تفاعل مستخدم
+    if(audioCtx && audioCtx.state === 'suspended' && typeof audioCtx.resume === 'function'){
+      audioCtx.resume().catch(()=>{});
+    }
+  }
+
+  function playClickSound(){
+    try{
+      ensureAudio();
+      if(!audioCtx) return;
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = 'square';
+      o.frequency.value = 900;
+      g.gain.value = 0.02;
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start();
+      setTimeout(()=>{ try{o.stop();}catch(e){} }, 80);
+    }catch(e){ console.warn('صوت النقر ليس متاحًا:', e); }
+  }
+
+  function playCashSound(){
+    try{
+      ensureAudio();
+      if(!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const g = audioCtx.createGain();
+      g.gain.value = 0.06;
+      g.connect(audioCtx.destination);
+
+      const freqs = [880, 660, 1240];
+      freqs.forEach((f,i)=>{
+        const o = audioCtx.createOscillator();
+        o.type = 'sine';
+        o.frequency.value = f;
+        o.connect(g);
+        o.start(now + i*0.03);
+        o.stop(now + i*0.03 + 0.12);
+      });
+    }catch(e){ console.warn('صوت الكاش غير متاح:', e); }
+  }
+
+  // عناصر DOM
+  let balance = 0;
+  const limit = 10;
+  let extraGiven = false;
+  let insistCount = 0;
+  const insistNeeded = 5;
+
+  const pressBtn = document.getElementById('pressBtn');
+  const balanceText = document.getElementById('balanceText');
+  const leftCount = document.getElementById('leftCount');
+  const meterFill = document.getElementById('meterFill');
+  const userMsg = document.getElementById('userMsg');
+  const trayText = document.getElementById('trayText');
+  const popup = document.getElementById('billPopup');
+
+  // تحديث الواجهة (مرن للوحدة وعرض)
+  function updateUI(){
+    // اعرض العملة العربية بدل $
+    balanceText.textContent = `${balance} د.`;
+    trayText.textContent = `${balance} د.`;
+    meterFill.style.width = Math.min(100, (balance/limit)*100) + '%';
+    leftCount.textContent = Math.max(0, limit - balance);
+    // تعيين aria-hidden/popup
+    if(popup.style.display === 'block'){
+      popup.setAttribute('aria-hidden','false');
+    }else{
+      popup.setAttribute('aria-hidden','true');
+    }
+  }
+
+  function showPopup(){
+    // إظهار صورة الدينار مع حركات خفيفة
+    popup.style.display = 'block';
+    popup.setAttribute('aria-hidden','false');
+    try{
+      popup.animate([{ transform: 'translate(-50%, -48%) scale(.98)', opacity:0 }, { transform: 'translate(-50%, -50%) scale(1)', opacity:1 }], { duration: 220, easing: 'cubic-bezier(.2,.9,.2,1)' });
+    }catch(e){}
+    createConfetti();
+    if(navigator.vibrate) navigator.vibrate(120);
+    // إخفاءه بعد مدة مناسبة
+    clearTimeout(popup._hideTimeout);
+    popup._hideTimeout = setTimeout(()=>{
+      popup.style.display = 'none';
+      popup.setAttribute('aria-hidden','true');
+    }, 1500);
+  }
+
+  // Confetti أكثر مرونة: يولد في عرض كامل الصفحة لكن ضمن حدود آمنة
+  function createConfetti(){
+    const colors = ['#ffd166','#06d6a0','#ef476f','#118ab2','#8ecae6'];
+    const count = Math.min(26, Math.floor(window.innerWidth / 36)); // عدد يعتمد على العرض
+    for(let i=0;i<count;i++){
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      const size = Math.max(6, Math.min(18, Math.round((Math.random()*12) + (window.innerWidth < 420 ? 6 : 8))));
+      c.style.width = size + 'px';
+      c.style.height = Math.round(size*1.6) + 'px';
+      // عشوائي أفقي
+      c.style.left = (5 + Math.random()*90) + '%';
+      c.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+      // اختلاف مدة السقوط
+      c.style.animationDuration = (1.2 + Math.random()*1.2) + 's';
+      document.body.appendChild(c);
+      // تنظيف بعد انتهاء الحركة
+      setTimeout(()=>{ try{ c.remove(); }catch(e){} }, 2400);
+    }
+  }
+
+  // حالة القفل بصريًا
+  let locked = false;
+  function lockMachine(){
+    locked = true;
+    pressBtn.classList.add('locked');
+    pressBtn.setAttribute('aria-pressed', 'true');
+    pressBtn.setAttribute('aria-disabled', 'true');
+  }
+  function unlockMachine(){
+    locked = false;
+    pressBtn.classList.remove('locked');
+    pressBtn.setAttribute('aria-pressed', 'false');
+    pressBtn.removeAttribute('aria-disabled');
+  }
+
+  // المعالجة الرئيسية للنقرات
+  function handlePress(){
+    // تهيئة صوت
+    ensureAudio();
+
+    // إذا كانت موقوفة بصريًا ولم نعطِ البونص بعد
+    if(!locked){
+      if(balance < limit){
+        playClickSound();
+        balance++;
+        updateUI();
+        showPopup();
+        playCashSound();
+        if(balance >= limit){
+          lockMachine();
+          userMsg.textContent = 'مية مية سادك روح!';
+        }else{
+          userMsg.textContent = '';
+        }
+      }
+      return;
+    }
+
+    if(locked && !extraGiven){
+      insistCount++;
+      userMsg.textContent = `معش في جنيات`;
+      playClickSound();
+      if(insistCount >= insistNeeded){
+        extraGiven = true;
+        unlockMachine();
+        userMsg.textContent = 'اخر جني!';
+        setTimeout(()=>{
+          playClickSound(); playCashSound(); showPopup();
+          balance++;
+          updateUI();
+          // نعيد قفل الماكينة بعد البونص
+          lockMachine();
+          userMsg.textContent = 'شن مزال تبي!';
+        }, 220);
+      }
+      return;
+    }
+
+    // بعد منح البونص لا تفعل شيء إضافي
+  }
+
+  // دعم اللمس والماوس ولوحة المفاتيح
+  pressBtn.addEventListener('click', (e)=>{ e.preventDefault(); handlePress(); });
+  pressBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); handlePress(); }, {passive:false});
+  // دعم الضغط المطول/اللمس: تجاوز تكرار الحد الأقصى عن طريق منع التكرار السريع
+  let lastPress = 0;
+  function guardedHandle(){
+    const now = Date.now();
+    if(now - lastPress < 120) return;
+    lastPress = now;
+    handlePress();
+  }
+  pressBtn.addEventListener('pointerdown', guardedHandle);
+
+  document.addEventListener('keydown', (e)=>{
+    if(e.code === 'Space' || e.code === 'Enter'){
+      // لا نمنع التمرير العام إلا إذا كان التركيز على الزر
+      if(document.activeElement === pressBtn){
+        e.preventDefault();
+        handlePress();
+      }
+    }
+  });
+
+  // توجيهات لسهولة الوصول: اجعل الزر قابلاً للتركيز بشكل واضح
+  pressBtn.addEventListener('focus', ()=>{ pressBtn.style.outline = '3px solid rgba(255,210,102,0.18)'; });
+  pressBtn.addEventListener('blur', ()=>{ pressBtn.style.outline = 'none'; });
+
+  // تهيئة الواجهة أولًا
+  updateUI();
+
+  // إعادة ضبط عند تغيير حجم النافذة (لتحسين confetti/عداد)
+  window.addEventListener('resize', ()=>{ /* يترك للتعامل الديناميكي عند الحاجة */ });
+</script>
+</body>
+</html>
