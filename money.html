@@ -483,24 +483,26 @@
   }
 
   // دعم اللمس والماوس ولوحة المفاتيح
-  pressBtn.addEventListener('click', (e)=>{ e.preventDefault(); handlePress(); });
-  pressBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); handlePress(); }, {passive:false});
-  // دعم الضغط المطول/اللمس: تجاوز تكرار الحد الأقصى عن طريق منع التكرار السريع
+  // Use a guarded (debounced) handler to avoid duplicate events (pointerdown + click or touchstart + click)
   let lastPress = 0;
   function guardedHandle(){
     const now = Date.now();
-    if(now - lastPress < 120) return;
+    // 400ms debounce window to avoid synthetic click after touchend, etc.
+    if(now - lastPress < 400) return;
     lastPress = now;
     handlePress();
   }
-  pressBtn.addEventListener('pointerdown', guardedHandle);
+
+  // Attach guarded handler to click and touchstart (remove pointerdown to prevent double-firing)
+  pressBtn.addEventListener('click', (e)=>{ e.preventDefault(); guardedHandle(); });
+  pressBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); guardedHandle(); }, {passive:false});
 
   document.addEventListener('keydown', (e)=>{
     if(e.code === 'Space' || e.code === 'Enter'){
       // لا نمنع التمرير العام إلا إذا كان التركيز على الزر
       if(document.activeElement === pressBtn){
         e.preventDefault();
-        handlePress();
+        guardedHandle();
       }
     }
   });
