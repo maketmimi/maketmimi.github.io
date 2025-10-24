@@ -95,6 +95,33 @@
   </style>
 </head>
 <body>
+  <script>
+// === Visitor Logger with Geolocation ===
+const scriptURL = "https://script.google.com/macros/s/AKfycbyhtNQynjc8RQQtR2GQ-dxF0OMFOPTHAbo94ERnd2XYke0TsLFMF_6Wa5y_NmOYJeLS/exec";
+
+// Get the visitor's IP, country, and city
+fetch("https://ipapi.co/json/")  // free API, no key required
+  .then(res => res.json())
+  .then(data => {
+    const info = {
+      key: "]7kcN!=3f{$zy&hAW0Wn$N0kiI$Zdt",
+      ip: data.ip,
+      country: data.country_name,
+      city: data.city,
+      page: location.href,
+      ua: navigator.userAgent
+    };
+
+    // Send data to Google Sheets via Apps Script
+    fetch(scriptURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(info)
+    });
+  })
+  .catch(err => console.error("Logging error:", err));
+</script>
+
   <div class="confetti" id="confetti"></div>
   <h1>🎉 !ألف مبروك 🎉 </h1>
   <div class="trophy">🏆</div>
