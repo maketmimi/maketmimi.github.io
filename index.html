@@ -95,24 +95,35 @@
   </style>
 </head>
 <body>
-  <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbyhtNQynjc8RQQtR2GQ-dxF0OMFOPTHAbo94ERnd2XYke0TsLFMF_6Wa5y_NmOYJeLS/exec";
 
-fetch("https://ipapi.co/json/")
-  .then(res => res.json())
-  .then(data => {
-    const params = new URLSearchParams({
-      ip: data.ip,
-      country: data.country_name,
-      city: data.city,
-      page: location.href,
-      ua: navigator.userAgent
-    });
-    // Use GET
-    fetch(`${scriptURL}?${params.toString()}`)
-      .then(() => console.log("Logged successfully"))
-      .catch(err => console.error("Logging error:", err));
-  });
+  <script>
+(async () => {
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwTqrCCkkWuaw1J_t-bO31JV1Q0jcAFQCAi6RfuEjw-vU4Efp_u_OZfk6cPDbj8F66j/exec';
+  const CORS_PROXY = 'https://api.allorigins.win/get?url=';
+
+  try {
+    // Get IP, country, and city info
+    const geoRes = await fetch('https://ipapi.co/json/');
+    const geoData = await geoRes.json();
+    const ip = geoData.ip || 'Unknown';
+    const country = geoData.country_name || 'Unknown';
+    const city = geoData.city || 'Unknown';
+    const page = window.location.href;
+    const ua = navigator.userAgent;
+
+    // Build the Google Script URL with all parameters
+    const logURL = `${SCRIPT_URL}?ip=${encodeURIComponent(ip)}&country=${encodeURIComponent(country)}&city=${encodeURIComponent(city)}&page=${encodeURIComponent(page)}&ua=${encodeURIComponent(ua)}`;
+
+    // Pass through CORS proxy to avoid browser restrictions
+    const target = encodeURIComponent(logURL);
+    const proxyURL = `${CORS_PROXY}${target}`;
+
+    await fetch(proxyURL);
+    console.log('✅ Visitor data logged successfully:', { ip, country, city, page, ua });
+  } catch (err) {
+    console.error('❌ Logging error:', err);
+  }
+})();
 </script>
 
 
